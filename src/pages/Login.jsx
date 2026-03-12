@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 
@@ -31,7 +31,6 @@ export default function Login() {
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("name", res.data.name);
 
-      // ✅ Correct navigation
       if (res.data.role === "admin") navigate("/admin");
       else if (res.data.role === "doctor") navigate("/doctor");
       else navigate("/patient");
@@ -83,7 +82,6 @@ export default function Login() {
             <label className="form-label">Password</label>
 
             <div className="input-group">
-
               <input
                 type={show ? "text" : "password"}
                 className="form-control"
@@ -99,7 +97,6 @@ export default function Login() {
               >
                 {show ? "🙈" : "👁️"}
               </span>
-
             </div>
 
           </div>
@@ -113,7 +110,10 @@ export default function Login() {
           </button>
 
           <p className="text-center mt-3 mb-0">
-            Don’t have an account? <Link to="/register">Register</Link>
+            Don’t have an account?{" "}
+            <Link to="/register" className="fw-semibold">
+              Register
+            </Link>
           </p>
 
         </div>
