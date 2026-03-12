@@ -1,0 +1,34 @@
+.hero{
+background: linear-gradient(135deg,#0d6efd,#6610f2);
+padding:120px 0;
+}
+
+.fade-in{
+animation: fade 1.5s ease-in-out;
+}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(-20px)}
+to{opacity:1; transform:translateY(0)}
+}
+
+.search-box{
+max-width:500px;
+margin:auto;
+}
+
+.doctor-card{
+transition:0.3s;
+}
+
+.doctor-card:hover{
+transform:translateY(-8px);
+}
+.blog-card{
+transition:0.3s;
+}
+
+.blog-card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}

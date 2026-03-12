@@ -1,0 +1,37 @@
+/* GREEN BLUE GRADIENT NAVBAR */
+
+.healthcare-navbar{
+background: linear-gradient(135deg,#0bbcd6,#00b894);
+padding: 10px 0;
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* BRAND TEXT */
+
+.brand-text{
+font-weight: 700;
+font-size: 22px;
+color: white;
+}
+
+/* NAV LINKS */
+
+.nav-link{
+color: white !important;
+font-weight: 500;
+margin-left: 15px;
+transition: all 0.3s ease;
+}
+
+/* HOVER ANIMATION */
+
+.nav-hover:hover{
+color: #e0ffff !important;
+transform: translateY(-2px);
+}
+
+/* MOBILE ICON */
+
+.navbar-toggler{
+border: 2px solid black;
+}
