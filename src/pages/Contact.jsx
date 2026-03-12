@@ -3,156 +3,172 @@ import Footer from "../components/Footer";
 import { useState } from "react";
 import api from "../api/axios";
 
-export default function Contact(){
+export default function Contact() {
 
-const [form,setForm]=useState({
-name:"",
-email:"",
-phone:"",
-message:""
-});
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: ""
+  });
 
-const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
-const sendMessage = async () => {
+  const sendMessage = async () => {
 
-if(!form.name || !form.email || !form.phone || !form.message){
-alert("Please fill all fields");
-return;
-}
+    if (!form.name || !form.email || !form.phone || !form.message) {
+      alert("Please fill all fields");
+      return;
+    }
 
-try{
+    // email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      alert("Please enter a valid email");
+      return;
+    }
 
-setLoading(true);
+    try {
 
-await api.post("/contact",form);
+      setLoading(true);
 
-alert("Message sent successfully");
+      const res = await api.post("/contact", form);
 
-setForm({
-name:"",
-email:"",
-phone:"",
-message:""
-});
+      alert(res.data.msg || "Message sent successfully");
 
-}catch(err){
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
 
-alert("Failed to send message");
+    } catch (err) {
 
-}
+      console.log(err);
 
-setLoading(false);
+      alert(
+        err.response?.data?.msg ||
+        "Server error. Please try again later."
+      );
 
-};
+    } finally {
 
-return(
-<> <HomeNavbar/>
+      setLoading(false);
 
-<section className="container my-5">
+    }
 
-<h2 className="text-center mb-5 fw-bold">
-Contact Us
-</h2>
+  };
 
-<div className="row g-4">
+  return (
+    <>
+      <HomeNavbar />
 
-{/* CONTACT INFO */}
+      <section className="container my-5">
 
-<div className="col-md-5">
+        <h2 className="text-center mb-5 fw-bold">
+          Contact Us
+        </h2>
 
-<div className="card shadow p-4 h-100">
+        <div className="row g-4">
 
-<h4 className="mb-4 text-primary">
-Get in Touch
-</h4>
+          {/* CONTACT INFO */}
+          <div className="col-md-5">
+            <div className="card shadow p-4 h-100">
 
-<p>
-📍 <b>Address:</b><br/>
-123 Health Street<br/>
-Kolkata, India
-</p>
+              <h4 className="mb-4 text-primary">
+                Get in Touch
+              </h4>
 
-<p>
-📞 <b>Phone:</b><br/>
-+91 9876543210
-</p>
+              <p>
+                📍 <b>Address:</b><br/>
+                123 Health Street<br/>
+                Kolkata, India
+              </p>
 
-<p>
-✉️ <b>Email:</b><br/>
-support@healthcare.com
-</p>
+              <p>
+                📞 <b>Phone:</b><br/>
+                +91 9876543210
+              </p>
 
-<p>
-🕒 <b>Working Hours:</b><br/>
-Mon - Sat : 9AM - 8PM
-</p>
+              <p>
+                ✉️ <b>Email:</b><br/>
+                support@healthcare.com
+              </p>
 
-</div>
+              <p>
+                🕒 <b>Working Hours:</b><br/>
+                Mon - Sat : 9AM - 8PM
+              </p>
 
-</div>
+            </div>
+          </div>
 
-{/* CONTACT FORM */}
+          {/* CONTACT FORM */}
+          <div className="col-md-7">
 
-<div className="col-md-7">
+            <div className="card shadow p-4">
 
-<div className="card shadow p-4">
+              <h4 className="mb-4 text-success">
+                Send Message
+              </h4>
 
-<h4 className="mb-4 text-success">
-Send Message
-</h4>
+              <input
+                className="form-control mb-3"
+                placeholder="Your Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({ ...form, name: e.target.value })
+                }
+              />
 
-<input
-className="form-control mb-3"
-placeholder="Your Name"
-value={form.name}
-onChange={(e)=>setForm({...form,name:e.target.value})}
-/>
+              <input
+                type="email"
+                className="form-control mb-3"
+                placeholder="Email Address"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+              />
 
-<input
-type="email"
-className="form-control mb-3"
-placeholder="Email Address"
-value={form.email}
-onChange={(e)=>setForm({...form,email:e.target.value})}
-/>
+              <input
+                type="tel"
+                className="form-control mb-3"
+                placeholder="Phone Number"
+                value={form.phone}
+                onChange={(e) =>
+                  setForm({ ...form, phone: e.target.value })
+                }
+              />
 
-<input
-type="tel"
-className="form-control mb-3"
-placeholder="Phone Number"
-value={form.phone}
-onChange={(e)=>setForm({...form,phone:e.target.value})}
-/>
+              <textarea
+                className="form-control mb-3"
+                rows="5"
+                placeholder="Write your message..."
+                value={form.message}
+                onChange={(e) =>
+                  setForm({ ...form, message: e.target.value })
+                }
+              />
 
-<textarea
-className="form-control mb-3"
-rows="5"
-placeholder="Write your message..."
-value={form.message}
-onChange={(e)=>setForm({...form,message:e.target.value})}
-/>
+              <button
+                className="btn btn-success w-100"
+                onClick={sendMessage}
+                disabled={loading}
+              >
+                {loading ? "Sending..." : "Send Message"}
+              </button>
 
-<button
-className="btn btn-success w-100"
-onClick={sendMessage}
-disabled={loading}
->
+            </div>
 
-{loading ? "Sending..." : "Send Message"}
+          </div>
 
-</button>
+        </div>
 
-</div>
+      </section>
 
-</div>
-
-</div>
-
-</section>
-
-<Footer/>
-
-</>
-);
+      <Footer />
+    </>
+  );
 }

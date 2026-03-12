@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 
 export default function Register() {
+
+const navigate = useNavigate();
 
 const [form, setForm] = useState({
 name: "",
@@ -24,18 +27,15 @@ const [success, setSuccess] = useState("");
 
 const validateEmail = (email) => {
 
-
-const emailRegex =
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 if (!emailRegex.test(email)) {
-  setEmailError("Enter a valid email address");
-  return false;
+setEmailError("Enter a valid email address");
+return false;
 }
 
 setEmailError("");
 return true;
-
 
 };
 
@@ -43,22 +43,21 @@ return true;
 
 const validatePassword = (password) => {
 
-
 const strongPassword =
-  /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
+/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
 
 if (!strongPassword.test(password)) {
 
-  setPasswordError(
-    "Password must contain 8 characters, uppercase letter, number and special character"
-  );
+setPasswordError(
+"Password must contain 8 characters, uppercase letter, number and special character"
+);
 
-  return false;
+return false;
+
 }
 
 setPasswordError("");
 return true;
-
 
 };
 
@@ -66,42 +65,39 @@ return true;
 
 const register = async () => {
 
-
 if (!form.name || !form.email || !form.password) {
-  showError("All fields are required");
-  return;
+showError("All fields are required");
+return;
 }
 
 if (!validateEmail(form.email)) return;
-
 if (!validatePassword(form.password)) return;
 
 try {
 
-  setLoading(true);
-  setError("");
-  setSuccess("");
+setLoading(true);
+setError("");
+setSuccess("");
 
-  await api.post("/auth/register", form);
+await api.post("/auth/register", form);
 
-  setSuccess("Registered successfully! Redirecting to login...");
+setSuccess("Registered successfully! Redirecting to login...");
 
-  setTimeout(() => {
-    window.location = "/";
-  }, 2000);
+setTimeout(() => {
+navigate("/login");
+}, 2000);
 
 } catch (err) {
 
-  showError(
-    err.response?.data?.msg || "Email already exists"
-  );
+showError(
+err.response?.data?.msg || "Email already exists"
+);
 
 } finally {
 
-  setLoading(false);
+setLoading(false);
 
 }
-
 
 };
 
@@ -113,174 +109,175 @@ setTimeout(() => setError(""), 3000);
 };
 
 return (
-<> <Navbar />
+<>
+<Navbar />
 
+<div
+className="container d-flex justify-content-center align-items-center"
+style={{ minHeight: "100vh" }}
+>
 
-  <div
-    className="container d-flex justify-content-center align-items-center"
-    style={{ minHeight: "100vh" }}
-  >
+<div className="col-md-4 card p-4 shadow-lg">
 
-    <div className="col-md-4 card p-4 shadow-lg">
+<h3 className="text-center mb-3">
+Create Account
+</h3>
 
-      <h3 className="text-center mb-3">
-        Create Account
-      </h3>
+{/* GLOBAL ERROR */}
 
-      {/* GLOBAL ERROR */}
-      {error && (
-        <div className="alert alert-danger text-center py-2">
-          {error}
-        </div>
-      )}
+{error && (
+<div className="alert alert-danger text-center py-2">
+{error}
+</div>
+)}
 
-      {/* SUCCESS */}
-      {success && (
-        <div className="alert alert-success text-center py-2">
-          {success}
-        </div>
-      )}
+{/* SUCCESS */}
 
-      {/* NAME */}
-      <div className="mb-3">
+{success && (
+<div className="alert alert-success text-center py-2">
+{success}
+</div>
+)}
 
-        <label className="form-label">
-          Full Name
-        </label>
+{/* NAME */}
 
-        <input
-          className="form-control"
-          placeholder="Enter full name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
-        />
+<div className="mb-3">
 
-      </div>
+<label className="form-label">
+Full Name
+</label>
 
-      {/* EMAIL */}
+<input
+className="form-control"
+placeholder="Enter full name"
+value={form.name}
+onChange={(e) =>
+setForm({ ...form, name: e.target.value })
+}
+/>
 
-      <div className="mb-3">
+</div>
 
-        <label className="form-label">
-          Email
-        </label>
+{/* EMAIL */}
 
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          value={form.email}
-          onChange={(e) => {
+<div className="mb-3">
 
-            const value = e.target.value;
+<label className="form-label">
+Email
+</label>
 
-            setForm({ ...form, email: value });
+<input
+type="email"
+className="form-control"
+placeholder="Enter email"
+value={form.email}
+onChange={(e) => {
 
-            validateEmail(value);
+const value = e.target.value;
 
-          }}
-        />
+setForm({ ...form, email: value });
 
-        {emailError && (
-          <small className="text-danger">
-            {emailError}
-          </small>
-        )}
+validateEmail(value);
 
-      </div>
+}}
+/>
 
-      {/* PASSWORD */}
+{emailError && (
+<small className="text-danger">
+{emailError}
+</small>
+)}
 
-      <div className="mb-3">
+</div>
 
-        <label className="form-label">
-          Password
-        </label>
+{/* PASSWORD */}
 
-        <div className="input-group">
+<div className="mb-3">
 
-          <input
-            type={show ? "text" : "password"}
-            className="form-control"
-            placeholder="Create strong password"
-            value={form.password}
-            onChange={(e) => {
+<label className="form-label">
+Password
+</label>
 
-              const value = e.target.value;
+<div className="input-group">
 
-              setForm({ ...form, password: value });
+<input
+type={show ? "text" : "password"}
+className="form-control"
+placeholder="Create strong password"
+value={form.password}
+onChange={(e) => {
 
-              validatePassword(value);
+const value = e.target.value;
 
-            }}
-          />
+setForm({ ...form, password: value });
 
-          <span
-            className="input-group-text"
-            style={{ cursor: "pointer" }}
-            onClick={() => setShow(!show)}
-          >
-            {show ? "🙈" : "👁️"}
-          </span>
+validatePassword(value);
 
-        </div>
+}}
+/>
 
-        {passwordError && (
-          <small className="text-danger">
-            {passwordError}
-          </small>
-        )}
+<span
+className="input-group-text"
+style={{ cursor: "pointer" }}
+onClick={() => setShow(!show)}
+>
+{show ? "🙈" : "👁️"}
+</span>
 
-      </div>
+</div>
 
-      {/* ROLE */}
+{passwordError && (
+<small className="text-danger">
+{passwordError}
+</small>
+)}
 
-      <div className="mb-3">
+</div>
 
-        <label className="form-label">
-          Register As
-        </label>
+{/* ROLE */}
 
-        <select
-          className="form-select"
-          value={form.role}
-          onChange={(e) =>
-            setForm({ ...form, role: e.target.value })
-          }
-        >
-          <option value="patient">Patient</option>
-          <option value="doctor">Doctor</option>
-        </select>
+<div className="mb-3">
 
-      </div>
+<label className="form-label">
+Register As
+</label>
 
-      {/* REGISTER BUTTON */}
+<select
+className="form-select"
+value={form.role}
+onChange={(e) =>
+setForm({ ...form, role: e.target.value })
+}
+>
+<option value="patient">Patient</option>
+<option value="doctor">Doctor</option>
+</select>
 
-      <button
-        className="btn btn-success w-100"
-        onClick={register}
-        disabled={loading}
-      >
-        {loading ? "Registering..." : "Register"}
-      </button>
+</div>
 
-      <p className="text-center mt-3 mb-0">
+{/* REGISTER BUTTON */}
 
-        Already have an account?{" "}
+<button
+className="btn btn-success w-100"
+onClick={register}
+disabled={loading}
+>
+{loading ? "Registering..." : "Register"}
+</button>
 
-        <a href="/login" className="fw-semibold">
-          Login
-        </a>
+<p className="text-center mt-3 mb-0">
 
-      </p>
+Already have an account?{" "}
 
-    </div>
+<Link to="/login" className="fw-semibold">
+Login
+</Link>
 
-  </div>
+</p>
+
+</div>
+
+</div>
 </>
-
-
 );
 }
